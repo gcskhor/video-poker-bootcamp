@@ -1,20 +1,40 @@
 body {
-  background-color: lightskyblue;
-  font-family: "Tillium Web", sans-serif;
+  /* background-color: lightskyblue; */
+  background-image: url("https://media.istockphoto.com/vectors/pixel-art-star-sky-at-night-vector-id1219022871?k=20&m=1219022871&s=612x612&w=0&h=5tXWlJP0KEIS4cx725-pB51A1uIY9O64osyTl339CPk=");
+  background-repeat: repeat-y repeat-x;
+  font-family: "VT323", monospace;
   font-weight: 100;
-
-  padding: 10px;
+  color: black;
+  padding: 5px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   text-align: center;
 }
 
-body > div {
-  padding: 13px;
+.bold-text {
+  font-family: "Press Start 2P", cursive;
+  font-size: 23px;
+  font-weight: bolder;
+  position: relative;
+  top: 5px;
 }
 
-h1 {
+body > div {
+  padding: 5px;
+  font-size: large;
+}
+
+#starter-window {
+  background-color: rgba(172, 172, 172, 0.205);
+  padding: 40px;
+}
+
+header {
   font-size: 50px;
+  font-family: "Press Start 2P", cursive;
+  padding: 20px;
 }
 
 .square {
@@ -31,13 +51,6 @@ h1 {
   background-color: rgba(255, 212, 219, 0.205);
 }
 
-.board {
-  background-color: antiquewhite;
-  margin: 0 auto;
-  display: inline-block;
-  justify-content: center;
-}
-
 .message {
   padding: 50px;
 
@@ -47,56 +60,17 @@ h1 {
   font-weight: 750;
 }
 
-.o-cell {
-  font-family: "Tillium Web", sans-serif;
-  font-size: xx-large;
-  font-weight: 1000;
-  padding: 10px;
-  margin: 10px;
-  background-color: lightyellow;
-  display: inline-block;
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
-  text-align: center;
-}
-
-.x-cell {
-  font-family: "Tillium Web", sans-serif;
-  font-size: xx-large;
-
-  font-weight: 1000;
-  padding: 10px;
-  margin: 10px;
-  background-color: lightpink;
-  display: inline-block;
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
-  text-align: center;
-}
-
-input {
-  width: 60vw;
-  background-color: white;
-  font-family: "Tillium Web", sans-serif;
-  font-weight: 100;
-  font-size: x-large;
-  text-align: center;
-  border: none;
-  display: inline-block;
-  margin: 0 auto;
-}
-
 button {
-  width: 60vw;
-  font-family: "Tillium Web", sans-serif;
-  font-size: x-large;
+  width: fit-content;
+  font-family: "Press Start 2P", cursive;
+  font-size: 20px;
   text-align: center;
-  border: none;
-  display: inline-block;
-  margin: 10px auto;
-  background-color: rgba(144, 238, 144, 0.774);
+  border: black dotted 3px;
+  border-radius: 5px;
+
+  margin: 10px 10px;
+
+  background-color: white;
 }
 
 button:hover {
@@ -107,4 +81,142 @@ button:hover {
   font-family: "Tillium Web", sans-serif;
   color: lightgrey;
   font-size: small;
+}
+
+#five-card-container {
+  width: 95vw;
+  height: auto;
+  min-width: 380px;
+  /* max-height: 30vh; */
+  background-color: none;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex: 2 0 20%;
+  margin: 5px;
+  /* flex-grow: 1; */
+  /* overflow: auto; */
+}
+
+.card-container {
+  /* width: 15vw;
+  height: 21vw; */
+  /* flex-grow: 1; */
+  font-size: 50px;
+  width: 120px;
+  height: 168px;
+  min-width: auto;
+  background-color: whitesmoke;
+  border-radius: 7px;
+  margin: 3px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: black solid 6px;
+}
+
+.card-container.red {
+  color: rgb(107, 0, 0);
+  border: rgb(107, 0, 0) solid 6px;
+}
+
+.card-container.face-down {
+  /* background-image: url(); */
+  background-color: darkslateblue;
+}
+
+.card-container.discard {
+  background-color: pink;
+}
+
+#ui-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+#display-message {
+  background-color: thistle;
+  font-size: 27px;
+  height: 80px;
+  width: 93%;
+  max-width: 650px;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#button-container {
+  width: 95vw;
+  height: 125px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#bet-increase-div {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+#bet-increase-div > button {
+  font-size: 15px;
+  padding: 3px;
+  flex-grow: 1;
+  font-size: 15x;
+  height: auto;
+  margin-left: 0;
+  margin-right: 0;
+  width: 150px;
+}
+#bet-plus-1 {
+  margin-top: 0;
+}
+#bet-minus-1 {
+  margin-bottom: 0;
+}
+
+#your-bet-div {
+  background-color: plum;
+  font-size: 25px;
+  word-wrap: normal;
+  padding: 10px;
+  margin: 10px 10px;
+  border: black dotted 3px;
+}
+
+#max-bet-button {
+  width: 150px;
+}
+
+#credit-balance-div {
+  width: 100%;
+  max-width: 650px;
+  background-color: plum;
+  font-size: 25px;
+  word-wrap: normal;
+  padding: 10px;
+  border: black dotted 3px;
+}
+
+#deal-button {
+  width: 100%;
+  max-width: 650px;
+  min-height: 50px;
+  background-color: royalblue;
+}
+
+#x-credits {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }

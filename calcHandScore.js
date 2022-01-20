@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
 /* eslint-disable max-len */
+const calcHandScore = (fiveCards) => {
+  const playerHand = fiveCards;
 
-const calcHandScore = () => {
-// variables for checking pairs/3-kinds/house
+  // variables for checking pairs/3-kinds/house
   let pair1Rank = 0;
   let pair2Rank = 0;
   let threeOfAKindRank = 0;
@@ -11,7 +11,7 @@ const calcHandScore = () => {
   // variables for checking flush
   let flushSuit = '';
 
-  // variables for determining handStrength
+  // variables for determining hand strength
   let twoPairFound = false;
   let threeOfAKindFound = false;
   let houseFound = false;
@@ -22,26 +22,32 @@ const calcHandScore = () => {
   let highAceStraightFound = false;
   let royalFlushFound = false;
 
+  // variable for determining strongest available combo
+  let bestCombo;
+  let highCardPresent = false;
+
   // tally by ranks
   const cardRankTally = {};
   // eslint-disable-next-line no-undef
   for (let i = 0; i < playerHand.length; i += 1) {
-    const cardrank = playerHand[i];
+    const cardRank = playerHand[i].rank;
     // if we've seen this rank before, then incerement.
-    if (cardrank in cardRankTally) {
-      cardRankTally[cardrank] += 1;
+    if (cardRank in cardRankTally) {
+      cardRankTally[cardRank] += 1;
     }
     else {
-      cardRankTally[cardrank] = 1;
+      cardRankTally[cardRank] = 1;
     }
   }
-
-  console.log('test');
 
   // list out the rank tally object keys as an array
   const rankTallyKeys = Object.keys(cardRankTally);
   // check for pairs/3-kinds/4-kinds/house
   for (let i = 0; i < rankTallyKeys.length; i += 1) {
+    // check if high card (jack or higher) exists
+    if (Number(rankTallyKeys[i]) === 11 || Number(rankTallyKeys[i]) === 12 || Number(rankTallyKeys[i]) === 13) {
+      highCardPresent = true;
+    }
     if (pair1Rank !== 0 && cardRankTally[rankTallyKeys[i]] === 2) {
       pair2Rank = rankTallyKeys[i];
     }
@@ -77,7 +83,6 @@ const calcHandScore = () => {
 
     // check for high Ace straight
     if (Number(rankTallyKeys[0]) === 1 && !straightFound) { // if first card is A and no straight found
-      console.log('checking for high ace straight');
       // reset currentCard and subsequentCard variables;
       currentCard = null;
       subsequentCard = null;
@@ -85,10 +90,8 @@ const calcHandScore = () => {
       for (let i = 1; i < rankTallyKeys.length - 1; i += 1) {
         currentCard = Number(rankTallyKeys[i]);
         subsequentCard = Number(rankTallyKeys[i + 1]);
-        console.log('a');
         if (currentCard !== subsequentCard - 1) {
           highAceStraightFound = false;
-          console.log('break detected in high ace straight');
           break; // end the loop early. Efficient siol
         }
       }
@@ -98,13 +101,13 @@ const calcHandScore = () => {
   // tally by suit
   const cardSuitTally = {};
   for (let i = 0; i < playerHand.length; i += 1) {
-    const suit = playerHand[i];
+    const cardSuit = playerHand[i].suit;
     // if we've seen this suit before, then incerement.
-    if (suit in cardSuitTally) {
-      cardSuitTally[suit] += 1;
+    if (cardSuit in cardSuitTally) {
+      cardSuitTally[cardSuit] += 1;
     }
     else {
-      cardSuitTally[suit] = 1;
+      cardSuitTally[cardSuit] = 1;
     }
   }
 
@@ -119,45 +122,55 @@ const calcHandScore = () => {
   }
 
   // log some consoles!
-  // determine actual hand strength.
+  // determine greatest hand strength.
+
+  // TWO PAIR
   if (pair1Rank !== 0 && pair2Rank !== 0) {
     twoPairFound = true;
+    bestCombo = 'twoPair';
     console.log(`2 pairs found! ${pair1Rank} and ${pair2Rank}`);
-  }
-  // FULL HOUSE
-  if (pair1Rank !== 0 && threeOfAKindRank !== 0) {
-    houseFound = true;
-    console.log(`house found! ${threeOfAKindRank} with ${pair1Rank} pair`);
   }
   // 3 OF A KIND
   if (threeOfAKindRank !== 0 && pair1Rank === 0) {
     threeOfAKindFound = true;
+    bestCombo = 'threeOfAKind';
     console.log(`three of a kind found! ${threeOfAKindRank}`);
+  }
+  // STRAIGHT
+  if (straightFound && !flushFound) {
+    bestCombo = 'straight';
+    console.log('straight found!');
+  }
+  // FLUSH
+  if (flushFound && !straightFound) {
+    bestCombo = 'flush';
+    console.log('flush found!');
+  }
+  // FULL HOUSE
+  if (pair1Rank !== 0 && threeOfAKindRank !== 0) {
+    houseFound = true;
+    bestCombo = 'fullHouse';
+    console.log(`house found! ${threeOfAKindRank} with ${pair1Rank} pair`);
   }
   // 4 OF A KIND
   if (fourOfAKindRank !== 0) {
     fourOfAKindFound = true;
+    bestCombo = 'fourOfAKind';
     console.log(`four of a kind found! ${fourOfAKindRank}`);
-  }
-  // FLUSH
-  if (flushFound && !straightFound) {
-    console.log('flush found!');
-  }
-  // STRAIGHT
-  if (straightFound && !flushFound) {
-    console.log('straight found!');
   }
   // STRAIGHT FLUSH
   if (straightFound === true && flushFound === true) {
     straightFlushFound = true;
+    bestCombo = 'straightFlush';
     console.log('straight flush found!');
   }
   // ROYAL FLUSH
   if (highAceStraightFound && flushFound) {
     royalFlushFound = true;
+    bestCombo = 'royalFlush';
     console.log(`royal flush found ${royalFlushFound}! WOW`);
   }
-  if (!twoPairFound && !threeOfAKindFound && !fourOfAKindFound && !straightFound && !flushFound && !highAceStraightFound) {
-    console.log('no combo found');
-  }
+
+  console.log(`best combo:  ${bestCombo}`);
+  console.log(`high card? ${highCardPresent}`);
 };
