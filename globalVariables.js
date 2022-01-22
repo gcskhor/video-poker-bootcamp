@@ -4,14 +4,32 @@
 
 let combos = ['ROYAL FLUSH', 'STRAIGHT FLUSH', 'FOUR OF A KIND', 'FULL HOUSE', 'FLUSH', 'STRAIGHT', 'THREE OF A KIND', 'TWO PAIR', 'JACK OR HIGHER BONUS'];
 const minPayout = [500, 150, 60, 10, 7, 5, 3, 2, 1];
+let updatedPayoutArray = [];
 
+const revealCardDelay = 300;
+
+let round = 0;
 let creditBalance = 100;
 const maxBet = 20;
 let currentBet = 0;
+let storedCurrentBet = 0;
 let gameState = 'bet';
+const hand = [];
+let deck;
+
+// SELECT CARDS TO DISCARD BEFORE DISCARDING
+const selectedDiscardCardArray = [];
+
+// delay for timer so that action occurs only after selected discarded cards have been flipped over
+let variableCardDelay = revealCardDelay * selectedDiscardCardArray.length;
 
 // INCREASE BET +1 on click
 const increaseBet = () => {
+  if (gameState === 'restart') {
+    gameState = 'bet';
+    initGame();
+  }
+
   if (currentBet !== maxBet) {
     currentBet += 1;
     creditBalance -= 1;
@@ -23,6 +41,12 @@ const increaseBet = () => {
     // grab and update current bet
     const xCredits = document.getElementById('x-credits');
     xCredits.innerHTML = `<span class="bold-text">${currentBet}</span> CREDITS`;
+  
+    if (currentBet !== 0) {
+    // enable deal button
+      const dealButton = document.getElementById('deal-button');
+      dealButton.disabled = false;
+    }
   }
   updatePayout();
   console.log(currentBet);
@@ -30,6 +54,11 @@ const increaseBet = () => {
 
 // DECREASE BET -1 on click
 const decreaseBet = () => {
+  // if (currentBet === 0) {
+  //   // disable deal button
+  //   const dealButton = document.getElementById('deal-button');
+  //   dealButton.disabled = true;
+  // }
   if (currentBet !== 0) {
     currentBet -= 1;
     creditBalance += 1;
@@ -41,6 +70,12 @@ const decreaseBet = () => {
     // grab and update current bet
     const xCredits = document.getElementById('x-credits');
     xCredits.innerHTML = `<span class="bold-text">${currentBet}</span> CREDITS`;
+  
+    if (currentBet === 0) {
+    // disable deal button
+      const dealButton = document.getElementById('deal-button');
+      dealButton.disabled = true;
+    }
   }
   updatePayout();
   console.log(currentBet);
@@ -48,12 +83,22 @@ const decreaseBet = () => {
 
 // CLICK MAX BET
 const maxBetClick = () => {
+  if (gameState === 'restart') {
+    gameState = 'bet';
+    initGame();
+  }
   if (currentBet !== maxBet) {
     // if credits bet is 1, credits remaining 99.
     // max bet, then credits bet +4 , credits remaining -4
     let difference = maxBet - currentBet;
     currentBet += difference;
     creditBalance -= difference;
+
+    if (currentBet !== 0) {
+    // enable deal button
+      const dealButton = document.getElementById('deal-button');
+      dealButton.disabled = false;
+    }
   }
   updatePayout();
   // grab and update credit balance
@@ -73,7 +118,6 @@ const deal = () => {
   // CHOOSE DISCARD STAGE
   if (gameState === 'discard') {
     if (selectedDiscardCardArray.length === 0) { // no cards to discard, then move to next mode
-      gameState = 'score';
       setTimeout(() => {
         if (calcHandScore(hand).highestcombo === 'none') {
           displayMessage.innerText = 'Well we already knew you would lose.\nBet again?';
@@ -97,6 +141,28 @@ const deal = () => {
         }
       }, 300 * selectedDiscardCardArray.length); // text to appear after all discards are replaced
     }
+
+    // change game state and activate buttons
+    setTimeout(() => {
+      // gameState = 'bet';
+      const betPlus1Button = document.getElementById('bet-plus-1');
+      const betMinus1Button = document.getElementById('bet-minus-1');
+      const maxBetButton = document.getElementById('max-bet-button');
+      betPlus1Button.disabled = false;
+      betMinus1Button.disabled = false;
+      maxBetButton.disabled = false;
+    }, 300 * selectedDiscardCardArray.length); 
+    // buttons to be enabled only after all discards are replaced
+
+    // Restart the game for the next round
+    // ########## restartGame(); ##########
+
+    // set timeout so that it credits only after the cards have been displayed
+    setTimeout(() => {
+      creditReward();
+      restartGame();
+      gameState = 'restart';
+    }, revealCardDelay * selectedDiscardCardArray.length);
   }
 
   // BET STAGE

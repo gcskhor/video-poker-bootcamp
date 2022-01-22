@@ -40,8 +40,13 @@ const createStarterWindow = () => {
 };
 
 const initGame = () => {
+  rebuildDeck();
   buildUI();
-  createStarterWindow();
+  if (round === 0) {
+    createStarterWindow();
+  }
+  round += 1;
+  console.log(calcHandScore(hand));
 };
 
 initGame();

@@ -236,6 +236,11 @@ button:hover {
   background-color: royalblue;
 }
 
+#deal-button:disabled {
+  background-color: rgba(38, 19, 121, 0.24);
+  border-color: rgba(0, 0, 0, 0.514);
+}
+
 #deal-button:hover {
   background-color: rgb(44, 74, 163);
 }

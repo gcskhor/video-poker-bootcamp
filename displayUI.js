@@ -6,7 +6,7 @@
  */
 const updatePayout = () => {
   // get new payout values
-  const updatedPayoutArray = minPayout.map((x) => x * currentBet);
+  updatedPayoutArray = minPayout.map((x) => x * currentBet);
 
   // rebuild payout cells
   const payoutColumn = document.getElementById('payout-column');
@@ -49,7 +49,7 @@ const build5CardContainer = () => {
 const revealCards = () => {
   let dealInterval = 0; // for looping the interval deal delay
   for (let i = 0; i < hand.length; i += 1) {
-    dealInterval += 300; // dealing delay
+    dealInterval += revealCardDelay; // dealing delay
     setTimeout(() => {
       const cardContainer = document.getElementById(`card-${i}`);
       cardContainer.innerHTML = `${hand[i].name}${hand[i].suitSymbol}`;
@@ -94,6 +94,7 @@ const buildUI = () => {
   // CREATE UI DIV
   const uiDiv = document.createElement('div');
   uiDiv.setAttribute('id', 'ui-div');
+  uiDiv.innerHTML = '';
   document.body.appendChild(uiDiv);
   uiDiv.style = 'display:none';
 

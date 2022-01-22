@@ -189,7 +189,8 @@ const calcHandScore = (fiveCards) => {
   // wrap results in an object so that it can be returned out
   const results = {
     highestcombo: bestCombo,
-    highcard: true,
+    highcard: highCardPresent,
   };
+
   return results;
 };

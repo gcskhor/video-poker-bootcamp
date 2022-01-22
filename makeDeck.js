@@ -72,16 +72,13 @@ const makeDeck = () => {
   return newDeck;
 };
 
-const hand = [];
-const deck = shuffleCards(makeDeck());
-
-for (let i = 0; i < 5; i += 1) {
-  hand[i] = deck.pop();
-}
-console.log(hand);
-
-// SELECT CARDS TO DISCARD BEFORE DISCARDING
-const selectedDiscardCardArray = [];
+const rebuildDeck = () => {
+  deck = shuffleCards(makeDeck());
+  for (let i = 0; i < 5; i += 1) {
+    hand[i] = deck.pop();
+  }
+  console.log(hand);
+};
 
 /**
  * A function that selects cards in the hand to be discarded if the user chooses.
@@ -89,7 +86,6 @@ const selectedDiscardCardArray = [];
  * Attached to eventlistener for each card to return cardIndex
  * @param {*} cardIndex
  */
-
 const discardCardSelect = (cardIndex) => {
   console.log(hand[cardIndex]);
   // select the card to be discarded
@@ -114,14 +110,14 @@ const discardCardSelect = (cardIndex) => {
     const cardForDiscard = document.getElementById(`card-${cardIndex}`);
     cardForDiscard.classList.add('discard');
   }
-  console.log(selectedDiscardCardArray);
 };
 
-calcHandScore(hand);
-
-// FUNCTION TAKES CARDS WHICH HAVE BEEN SELECTED FOR DISCARDING, AND DISCARDS THEM
-// activated when cards have been selected (or not) and deal button is hit
-// function name is also a pun
+/**
+ * FUNCTION TAKES CARDS WHICH HAVE BEEN SELECTED FOR DISCARDING, AND DISCARDS THEM.
+ * Activated when cards have been selected (or not) and deal button is hit.
+ * Function name is also a pun
+ * @param {*} discardedIndexes
+ */
 const discard = (discardedIndexes) => {
   if (selectedDiscardCardArray.length > 0) { // cards to discard exist
     for (let i = 0; i < discardedIndexes.length; i += 1) {
