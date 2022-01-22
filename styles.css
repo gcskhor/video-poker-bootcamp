@@ -83,6 +83,26 @@ button:hover {
   font-size: small;
 }
 
+#payout-table {
+  color: whitesmoke;
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  margin: 3px;
+}
+
+#combo-column {
+  padding: 5px;
+  margin: 3px;
+  text-align: end;
+}
+
+#payout-column {
+  padding: 5px;
+  margin: 3px;
+  text-align: left;
+}
+
 #five-card-container {
   width: 95vw;
   height: auto;
@@ -105,8 +125,8 @@ button:hover {
   height: 21vw; */
   /* flex-grow: 1; */
   font-size: 50px;
-  width: 120px;
-  height: 168px;
+  width: 100px;
+  height: 140px;
   min-width: auto;
   background-color: whitesmoke;
   border-radius: 7px;
@@ -120,7 +140,7 @@ button:hover {
 
 .card-container.red {
   color: rgb(107, 0, 0);
-  border: rgb(107, 0, 0) solid 6px;
+  /* border: rgb(107, 0, 0) solid 6px; */
 }
 
 .card-container.face-down {
@@ -194,11 +214,13 @@ button:hover {
 }
 
 #max-bet-button {
+  /* display: flex; */
   width: 150px;
+  /* flex-shrink: 1; */
 }
 
 #credit-balance-div {
-  width: 100%;
+  width: 90%;
   max-width: 650px;
   background-color: plum;
   font-size: 25px;
@@ -214,9 +236,18 @@ button:hover {
   background-color: royalblue;
 }
 
+#deal-button:hover {
+  background-color: rgb(44, 74, 163);
+}
+
 #x-credits {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
+}
+
+button:disabled {
+  background-color: rgba(38, 19, 121, 0.24);
+  border-color: rgba(0, 0, 0, 0.514);
 }

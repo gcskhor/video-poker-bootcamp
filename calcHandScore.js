@@ -1,4 +1,12 @@
 /* eslint-disable max-len */
+
+/**
+ * Function that takes 5 cards in the hand array and determines the strongest combo that the cards form.
+ * Returns results in the form of an object which contains the highest combo and a boolean of whether there is a high card present.
+ *
+ * @param {*} fiveCards
+ * @returns result object
+ */
 const calcHandScore = (fiveCards) => {
   const playerHand = fiveCards;
 
@@ -127,50 +135,61 @@ const calcHandScore = (fiveCards) => {
   // TWO PAIR
   if (pair1Rank !== 0 && pair2Rank !== 0) {
     twoPairFound = true;
-    bestCombo = 'twoPair';
+    bestCombo = 'TWO PAIR';
     console.log(`2 pairs found! ${pair1Rank} and ${pair2Rank}`);
   }
   // 3 OF A KIND
   if (threeOfAKindRank !== 0 && pair1Rank === 0) {
     threeOfAKindFound = true;
-    bestCombo = 'threeOfAKind';
+    bestCombo = 'THREE OF A KIND';
     console.log(`three of a kind found! ${threeOfAKindRank}`);
   }
   // STRAIGHT
   if (straightFound && !flushFound) {
-    bestCombo = 'straight';
+    bestCombo = 'STRAIGHT';
     console.log('straight found!');
   }
   // FLUSH
-  if (flushFound && !straightFound) {
-    bestCombo = 'flush';
+  if ((flushFound && !straightFound) || (highAceStraightFound && !straightFound)) {
+    bestCombo = 'FLUSH';
     console.log('flush found!');
   }
   // FULL HOUSE
   if (pair1Rank !== 0 && threeOfAKindRank !== 0) {
     houseFound = true;
-    bestCombo = 'fullHouse';
+    bestCombo = 'FULL HOUSE';
     console.log(`house found! ${threeOfAKindRank} with ${pair1Rank} pair`);
   }
   // 4 OF A KIND
   if (fourOfAKindRank !== 0) {
     fourOfAKindFound = true;
-    bestCombo = 'fourOfAKind';
+    bestCombo = 'FOUR OF A KIND';
     console.log(`four of a kind found! ${fourOfAKindRank}`);
   }
   // STRAIGHT FLUSH
   if (straightFound === true && flushFound === true) {
     straightFlushFound = true;
-    bestCombo = 'straightFlush';
+    bestCombo = 'STRAIGHT FLUSH';
     console.log('straight flush found!');
   }
   // ROYAL FLUSH
   if (highAceStraightFound && flushFound) {
     royalFlushFound = true;
-    bestCombo = 'royalFlush';
+    bestCombo = 'ROYAL FLUSH';
     console.log(`royal flush found ${royalFlushFound}! WOW`);
+  }
+
+  if (bestCombo === undefined) {
+    bestCombo = 'none';
   }
 
   console.log(`best combo:  ${bestCombo}`);
   console.log(`high card? ${highCardPresent}`);
+
+  // wrap results in an object so that it can be returned out
+  const results = {
+    highestcombo: bestCombo,
+    highcard: true,
+  };
+  return results;
 };

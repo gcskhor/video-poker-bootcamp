@@ -1,8 +1,30 @@
+/* eslint-disable max-len */
 /* eslint-disable no-loop-func */
+
 /**
- * A function that rebuilds the five card container after discarding and replacing cards.
+ * FUNCTION THAT ADDS CREDITS TO USER'S BALANCE BASED ON THE BET PLACED AND THE BEST COMBO FOUND.
  */
-const rebuild5CardContainer = () => {
+const updatePayout = () => {
+  // get new payout values
+  const updatedPayoutArray = minPayout.map((x) => x * currentBet);
+
+  // rebuild payout cells
+  const payoutColumn = document.getElementById('payout-column');
+  payoutColumn.innerHTML = ''; // clear out payout Column html
+  // loop to add payout cells to payout column
+  updatedPayoutArray.forEach((updatedPayoutArray) => {
+    const payoutCell = document.createElement('div');
+    payoutCell.classList.add('payout-cell');
+    payoutCell.innerText = `${updatedPayoutArray}`;
+    payoutColumn.appendChild(payoutCell);
+    console.log(updatedPayoutArray);
+  });
+};
+
+/**
+ * A function that builds the five card container after discarding and replacing cards.
+ */
+const build5CardContainer = () => {
   const fiveCardContainer = document.getElementById('five-card-container');
   fiveCardContainer.innerHTML = ''; // reset card containers
 
@@ -21,7 +43,9 @@ const rebuild5CardContainer = () => {
   }
 };
 
-// FUNCTION TO REVEAL CARDS FROM FACE DOWN
+/**
+ * FUNCTION TO REVEAL CARDS FROM FACE DOWN
+ */
 const revealCards = () => {
   let dealInterval = 0; // for looping the interval deal delay
   for (let i = 0; i < hand.length; i += 1) {
@@ -41,6 +65,28 @@ const revealCards = () => {
 };
 
 /**
+ * FUNCTION TO REVEAL NEW CARDS AFTER DISCARDING
+ */
+const replaceDiscards = () => {
+  // sort the selectedDiscardCardArray in acscending order before applying reveal to reveal in order of index
+  selectedDiscardCardArray.sort((a, b) => a - b);
+  let dealInterval = 0; // Initialiser for looping the interval deal delay
+  for (let i = 0; i < selectedDiscardCardArray.length; i += 1) {
+    dealInterval += 300; // dealing delay
+    setTimeout(() => {
+      const cardContainer = document.getElementById(`card-${selectedDiscardCardArray[i]}`);
+      cardContainer.innerHTML = `${hand[selectedDiscardCardArray[i]].name}${hand[selectedDiscardCardArray[i]].suitSymbol}`; // only get the replaced indexes from the new cards
+      cardContainer.classList.add('card-container');
+      cardContainer.classList.remove('face-down');
+      cardContainer.classList.remove('discard'); // remove discard selector class
+      if (hand[i].suit === 'diamonds' || hand[i].suit === 'hearts') {
+        cardContainer.classList.add('red');
+      }
+    }, dealInterval);
+  }
+};
+
+/**
  * A function that builds the UI interface of the video poker game;
  * limits the number of elements in html
  */
@@ -51,6 +97,33 @@ const buildUI = () => {
   document.body.appendChild(uiDiv);
   uiDiv.style = 'display:none';
 
+  // BUILD PAYOUT TABLE
+  const payoutTable = document.createElement('div');
+  payoutTable.setAttribute('id', 'payout-table');
+  uiDiv.appendChild(payoutTable);
+  // build combo column
+  const comboColumn = document.createElement('div');
+  comboColumn.setAttribute('id', 'combo-column');
+  payoutTable.appendChild(comboColumn);
+  // loop to add hand combos to payout table;
+  combos.forEach((combos) => {
+    const comboCell = document.createElement('div');
+    comboCell.classList.add('combo-cell');
+    comboCell.innerText = `${combos}`;
+    comboColumn.appendChild(comboCell);
+  });
+  // build payout column
+  const payoutColumn = document.createElement('div');
+  payoutColumn.setAttribute('id', 'payout-column');
+  payoutTable.appendChild(payoutColumn);
+  // loop to add payouts to payout table
+  minPayout.forEach((minPayout) => {
+    const payoutCell = document.createElement('div');
+    payoutCell.classList.add('payout-cell');
+    payoutCell.innerText = `${minPayout}`;
+    payoutColumn.appendChild(payoutCell);
+  });
+
   // CREATE 5-CARD CONTAINER
   const fiveCardContainer = document.createElement('div');
   // fiveCardContainer.innerHTML = '5-card container here';
@@ -58,11 +131,11 @@ const buildUI = () => {
   uiDiv.appendChild(fiveCardContainer);
 
   // build the 5-card container
-  rebuild5CardContainer();
+  build5CardContainer();
 
   // // CREATE DISPLAY MESSAGE DIV
   const displayMessage = document.createElement('div');
-  displayMessage.innerText = 'best combo: ';
+  displayMessage.innerText = 'Place your bet!!';
   displayMessage.setAttribute('id', 'display-message');
   uiDiv.appendChild(displayMessage);
 
@@ -105,6 +178,7 @@ const buildUI = () => {
   maxBetButton.innerText = 'MAX BET';
   maxBetButton.setAttribute('id', 'max-bet-button');
   buttonContainer.appendChild(maxBetButton);
+  maxBetButton.addEventListener('click', maxBetClick);
 
   // CREATE CREDIT BALANCE DIV;
   const creditBalance = document.createElement('div');
@@ -117,6 +191,7 @@ const buildUI = () => {
   dealButton.innerText = 'DEAL';
   dealButton.setAttribute('id', 'deal-button');
   uiDiv.appendChild(dealButton);
+  dealButton.addEventListener('click', deal);
 };
 
 buildUI();
